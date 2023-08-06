@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Overlay, ModalEl } from './Modal.styled';
 
 export class Modal extends Component {
   componentDidMount() {
@@ -11,24 +12,27 @@ export class Modal extends Component {
 
   handleKeyDown = event => {
     if (event.code === 'Escape') {
-      this.props.onClose();
+      this.props.onClick();
     }
   };
 
   handleBackdropClick = event => {
     if (event.target === event.currentTarget) {
-      this.props.onClose();
+      this.props.onClick();
     }
   };
 
   render() {
-    const { src, alt } = this.props;
+    const { image } = this.props;
+    const imageUrl = image ? image.largeImageURL : null;
+    const alt = image ? image.tags : '';
+
     return (
-      <div className="overlay" onClick={this.handleBackdropClick}>
-        <div className="modal">
-          <img src={src} alt={alt} />
-        </div>
-      </div>
+      <Overlay onClick={this.handleBackdropClick}>
+        <ModalEl className="modal">
+          {imageUrl && <img src={imageUrl} alt={alt} />}
+        </ModalEl>
+      </Overlay>
     );
   }
 }
